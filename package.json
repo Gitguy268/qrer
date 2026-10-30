@@ -1,0 +1,33 @@
+{
+  "name": "qrer",
+  "version": "2.7.0",
+  "private": true,
+  "description": "A local QR utility with Classic controls and liquid glass",
+  "scripts": {
+    "start": "python3 serve.py --port 4317",
+    "test": "npm run check && npm run test:browser",
+    "test:webkit": "node scripts/test-browser.mjs --webkit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:unit": "node --test tests/unit/*.test.mjs",
+    "check": "npm run lint && npm run format:check && npm run test:unit && node scripts/release.mjs --check",
+    "release:sync": "node scripts/release.mjs",
+    "test:browser": "node scripts/test-browser.mjs",
+    "package": "npm run check && python3 scripts/package.py"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.13.0",
+    "globals": "16.5.0",
+    "jsqr": "1.4.0",
+    "playwright": "1.62.1",
+    "prettier": "3.6.2",
+    "sharp": "0.35.5"
+  },
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || >=24"
+  }
+}

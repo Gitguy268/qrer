@@ -1,0 +1,14 @@
+/* Adapted from Windows 98 Web Edition's address-bar controls.
+   Copyright (c) 2025 Aziz Rahmad. MIT; see LICENSE.
+   Scoped to Qrer's Win97 theme; no upstream fonts, icons or media included. */
+:root[data-theme=win97] {--ButtonFace:#c0c0c0;--ButtonHighlight:#fff;--ButtonShadow:#808080;--ButtonText:#000}
+[data-theme=win97] button:not(.text-button):not(.preset-button):not([role=tab]) {
+  border:1px solid var(--ButtonFace);
+  box-shadow:inset 1px 1px var(--ButtonHighlight),inset -1px -1px var(--ButtonShadow),1px 1px var(--ButtonText);
+}
+[data-theme=win97] button:not(.text-button):not(.preset-button):not([role=tab]):active {
+  box-shadow:inset 1px 1px var(--ButtonShadow),inset -1px -1px var(--ButtonHighlight);
+}
+[data-theme=win97] .scan-result,[data-theme=win97] .photo-well {
+  border:2px groove var(--ButtonShadow);box-sizing:border-box;
+}

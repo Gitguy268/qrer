@@ -1,0 +1,1051 @@
+/* Copyright (c) 2026 Lucas Van De Weerd. MIT.
+   Taskbar/divider patterns adapted from azayrahmad/win98-web (MIT).
+   Start-menu/taskbar layout patterns adapted from pollygon-dev/WIN98-template
+   (Unlicense). Source sections and notices retained in assets/vendor/. */
+.retro-only,
+.retro-floating {
+  display: none;
+}
+.retro-icon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  fill: none;
+  shape-rendering: crispEdges;
+}
+:root[data-theme='win97'] {
+  --desktop: #008080;
+  --panel: #c0c0c0;
+  --face: #c0c0c0;
+  --field: #fff;
+  --ink: #000;
+  --muted: #333;
+  --line: #808080;
+  --accent: #000080;
+  --selected: #c0c0c0;
+  --radius: 0px;
+  --control-radius: 0px;
+  --lcd: #fff;
+  --lcd-ink: #000;
+  font-family: Tahoma, 'MS Sans Serif', Arial, sans-serif;
+  font-size: 12px;
+}
+[data-theme='win97'] body {
+  padding: 24px 24px 60px 124px;
+  align-items: center;
+  font-size: 12px;
+  letter-spacing: 0;
+}
+[data-theme='win97'] .retro-only {
+  display: flex;
+}
+[data-theme='win97'] .app-window {
+  width: min(1000px, 100%);
+  padding: 3px;
+  border: 1px solid #dfdfdf;
+  border-radius: 0;
+  background: #c0c0c0 !important;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    2px 3px #0005;
+  transform: none;
+  overflow: visible;
+}
+/* The 3px frame turns to glass; the work area, menu bar and status bar stay solid. */
+[data-theme='win97'][data-glass-state='active'] .app-window {
+  background: transparent !important;
+}
+[data-theme='win97'][data-glass-state='active'] :is(.window-toolbar, .work-area, .statusbar) {
+  background: #c0c0c0;
+}
+[data-theme='win97'] .titlebar,
+[data-theme='win97'][data-glass-state='active'] .titlebar {
+  min-height: 32px;
+  padding: 3px 4px 3px 5px;
+  gap: 8px;
+  border-radius: 0;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+}
+[data-theme='win97'] .app-title {
+  gap: 6px;
+  min-width: 0;
+}
+[data-theme='win97'] .app-title > .icon {
+  display: none;
+}
+[data-theme='win97'] .app-title > .retro-icon {
+  width: 22px;
+  height: 22px;
+}
+[data-theme='win97'] .app-title h1 {
+  font:
+    bold 13px Tahoma,
+    Arial,
+    sans-serif;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  text-shadow: none;
+}
+[data-theme='win97'] .retro-caption {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+[data-theme='win97'] .window-options {
+  gap: 6px;
+  font-size: 11px;
+}
+[data-theme='win97'] .window-options select {
+  width: 95px;
+  min-height: 23px;
+  height: 23px;
+  padding: 2px 4px;
+  font-size: 11px !important;
+  background: #c0c0c0;
+  color: #000;
+  border: 2px inset #fff;
+}
+[data-theme='win97'] .glass-control {
+  font-size: 11px;
+  gap: 5px;
+  margin-left: 3px;
+  color: #000;
+}
+[data-theme='win97'] .glass-control input {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow:
+    inset 1px 1px #808080,
+    inset 2px 2px #000,
+    inset -1px -1px #fff,
+    inset -2px -2px #dfdfdf;
+}
+[data-theme='win97'] .glass-control input:checked::after {
+  content: '✓';
+  font:
+    bold 10px/1 Tahoma,
+    sans-serif;
+  color: #000;
+}
+[data-theme='win97'] .glass-control input:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: 2px;
+}
+[data-theme='win97'] .glass-control input:before {
+  display: none;
+}
+[data-theme='win97'] .retro-window-controls {
+  gap: 2px;
+  margin-left: 9px;
+}
+[data-theme='win97'] .retro-window-controls button {
+  width: 21px;
+  height: 21px;
+  min-height: 0 !important;
+  padding: 0 !important;
+  display: grid;
+  place-items: center;
+  color: #000;
+  flex: none;
+}
+.minimize-glyph {
+  width: 9px;
+  height: 3px;
+  background: #000;
+  align-self: end;
+  margin-bottom: 4px;
+}
+.maximize-glyph {
+  width: 11px;
+  height: 10px;
+  border: 1px solid #000;
+  border-top-width: 3px;
+}
+.close-glyph {
+  font:
+    700 19px/14px Arial,
+    sans-serif;
+  margin-top: -1px;
+}
+[data-theme='win97'] .window-toolbar {
+  height: 35px;
+  padding: 0 7px;
+  font-size: 11px;
+  box-shadow:
+    inset 0 -1px #808080,
+    inset 0 -2px #fff;
+  background: #c0c0c0 !important;
+}
+[data-theme='win97'] .document-title {
+  font-size: 11px;
+  padding-left: 7px;
+  border-left: 3px double #808080;
+  gap: 6px;
+}
+[data-theme='win97'] .utility-actions {
+  gap: 1px;
+}
+[data-theme='win97'] .tools-menu {
+  order: -3;
+}
+[data-theme='win97'] #retroViewMenu {
+  order: -2;
+}
+[data-theme='win97'] #retroHelpMenu {
+  order: -1;
+}
+[data-theme='win97'] .tools-menu summary,
+[data-theme='win97'] .retro-menu summary {
+  font-size: 12px;
+  list-style: none;
+  cursor: pointer;
+  padding: 3px 8px;
+  min-height: 25px;
+  color: #000;
+}
+[data-theme='win97'] summary::-webkit-details-marker {
+  display: none;
+}
+[data-theme='win97'] .tools-menu[open] summary,
+[data-theme='win97'] .retro-menu[open] summary {
+  background: #000080;
+  color: #fff;
+  border-radius: 0;
+}
+[data-theme='win97'] .tools-popup,
+[data-theme='win97'] .retro-popup {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  right: auto;
+  min-width: 210px;
+  padding: 3px;
+  background: #c0c0c0 !important;
+  border: 2px outset #eee;
+  border-radius: 0;
+  box-shadow: 2px 2px #0006;
+  z-index: 15;
+}
+[data-theme='win97'] .retro-menu {
+  position: relative;
+}
+[data-theme='win97'] .retro-popup {
+  display: block;
+}
+[data-theme='win97'] .retro-popup button,
+[data-theme='win97'] .tools-popup button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 12px;
+  min-height: 28px !important;
+  padding: 4px 16px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #000;
+}
+[data-theme='win97'] .retro-popup button:hover,
+[data-theme='win97'] .retro-popup button:focus-visible,
+[data-theme='win97'] .tools-popup button:hover,
+[data-theme='win97'] .tools-popup button:focus-visible {
+  background: #000080 !important;
+  color: #fff !important;
+  outline: none;
+}
+[data-theme='win97'] .retro-popup hr {
+  border: 0;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  margin: 4px;
+}
+[data-theme='win97'] .utility-actions #scanBtn {
+  margin-left: 9px;
+  font-size: 11px;
+  min-height: 25px !important;
+  padding: 3px 8px !important;
+}
+[data-theme='win97'] .work-area {
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  grid-template-columns: 342px minmax(0, 1fr);
+  box-shadow: none;
+  min-height: 510px;
+  background: #c0c0c0;
+}
+[data-theme='win97'] .editor {
+  border-right: 1px solid #808080;
+  padding: 4px 0 0;
+  background: #c0c0c0;
+}
+[data-theme='win97'] .editor-tabs {
+  margin: 16px 14px 0;
+  padding: 0 2px;
+  height: 29px;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid #fff;
+  border-radius: 0;
+  box-shadow: 0 1px #808080;
+  gap: 0;
+  align-items: end;
+}
+[data-theme='win97'] .editor-tabs button {
+  flex: initial;
+  min-width: 82px;
+  height: 25px;
+  padding: 3px 13px;
+  font-size: 12px;
+  border: 1px solid #808080 !important;
+  border-bottom: 0 !important;
+  border-radius: 3px 3px 0 0 !important;
+  color: #000;
+  background: #c0c0c0;
+  box-shadow: inset 1px 1px #fff !important;
+}
+[data-theme='win97'] .editor-tabs button[aria-selected='true'] {
+  height: 28px;
+  background: #c0c0c0;
+  font-weight: 400;
+  z-index: 2;
+  margin-bottom: -1px;
+  border-bottom: 1px solid #c0c0c0 !important;
+}
+[data-theme='win97'] .panel {
+  padding: 19px 18px;
+  min-height: 450px;
+}
+[data-theme='win97'] .field-label {
+  font-size: 12px;
+  font-weight: 400;
+  margin: 16px 0 6px;
+}
+[data-theme='win97'] .panel > .field-label:first-child {
+  margin-top: 0;
+}
+[data-theme='win97'] input:not([type='checkbox']):not([type='range']):not([type='color']),
+[data-theme='win97'] select,
+[data-theme='win97'] textarea {
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  border-radius: 0;
+  box-shadow: inset 1px 1px #000;
+  min-height: 29px;
+  padding: 5px 7px;
+  font-size: 12px;
+  background: #fff;
+  color: #000;
+}
+[data-theme='win97'] textarea#data {
+  min-height: 150px;
+  font:
+    12px/1.6 'Courier New',
+    monospace;
+}
+[data-theme='win97'] .help {
+  font-size: 11px;
+}
+[data-theme='win97'] .output {
+  padding: 23px 25px 18px;
+  background: #c0c0c0;
+}
+[data-theme='win97'] .qr-stage {
+  min-height: 260px;
+  padding: 18px;
+  background: #fff;
+  box-shadow:
+    inset 1px 1px #808080,
+    inset 2px 2px #000,
+    inset -1px -1px #fff,
+    inset -2px -2px #dfdfdf;
+}
+[data-theme='win97'] .quality:empty {
+  display: none;
+}
+[data-theme='win97'] .qr-stage + .quality:empty + .export-tray {
+  margin-top: 14px;
+}
+[data-theme='win97'] .quality {
+  font-size: 11px;
+  color: #333;
+  margin: 12px 0;
+}
+[data-theme='win97'] .export-tray {
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+  border-radius: 0;
+  padding: 8px;
+  background: #c0c0c0;
+  box-shadow: none;
+}
+[data-theme='win97'] .export-toolbar {
+  min-height: 35px;
+  padding: 3px 4px;
+  border: 0;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px #fff,
+    inset 0 -1px #808080;
+  background: #c0c0c0;
+  gap: 6px;
+}
+[data-theme='win97'] .export-toolbar:before {
+  content: '';
+  height: 22px;
+  width: 4px;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #808080;
+  flex: none;
+  margin-right: 1px;
+}
+[data-theme='win97'] .export-toolbar select {
+  font-size: 11px;
+  min-height: 26px;
+  height: 26px;
+  width: 90px;
+  padding: 3px 5px;
+}
+[data-theme='win97'] .export-toolbar button {
+  font-size: 11px;
+  border-radius: 0 !important;
+  min-height: 26px;
+  padding: 3px 7px !important;
+}
+[data-theme='win97'] :where(button:not(.text-button):not(.preset-button):not([role='tab'])),
+[data-theme='win97'] button.primary,
+[data-theme='win97'] #dlPng.primary.lg-host {
+  border: 1px solid #808080 !important;
+  border-radius: 0 !important;
+  color: #000 !important;
+  background: #c0c0c0 !important;
+  text-shadow: none;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #808080,
+    1px 1px #000 !important;
+}
+[data-theme='win97']
+  :where(button:not(:disabled):not(.text-button):not(.preset-button):not([role='tab']):active) {
+  box-shadow:
+    inset 1px 1px #808080,
+    inset -1px -1px #fff !important;
+  transform: none;
+}
+[data-theme='win97'] .download-actions {
+  gap: 9px;
+  margin-top: 10px;
+}
+[data-theme='win97'] .download-actions button {
+  min-height: 35px !important;
+  font-size: 12px;
+}
+[data-theme='win97'] .download-actions #dlPng {
+  outline: 1px solid #000;
+  outline-offset: 1px;
+}
+[data-theme='win97'] .export-help {
+  font-size: 10px;
+}
+[data-theme='win97'] button:focus-visible,
+[data-theme='win97'] summary:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -5px;
+}
+[data-theme='win97'] .text-button {
+  color: #000080;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+[data-theme='win97'] .statusbar,
+[data-theme='win97'][data-glass-state='active'] .statusbar {
+  border-radius: 0;
+  background: #c0c0c0;
+  height: 28px;
+  padding: 3px 2px 0;
+  font-size: 10px;
+}
+[data-theme='win97'] .statusbar > span {
+  min-height: 20px;
+  padding: 2px 6px;
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+}
+[data-theme='win97'] .statusbar > div {
+  padding: 2px 7px;
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+  gap: 13px;
+}
+/* Liquid glass. Only chrome over the wallpaper is see-through and bends it; menus,
+   fields and the QR stay solid Win98 grey so they read cleanly. */
+[data-theme='win97'] .lg-host {
+  --lg-radius: 0px !important;
+  --lg-tint: #c0c0c01a;
+  --lg-solid: #c0c0c0;
+  background: transparent !important;
+}
+[data-theme='win97'] .lg-host > .lg-layer {
+  box-shadow: none;
+}
+[data-theme='win97'] .lg-host > .lg-sheen {
+  opacity: 0.5;
+  background: none;
+  box-shadow:
+    inset 1px 1px #fffc,
+    inset -1px -1px #0004;
+}
+[data-theme='win97'] .titlebar.lg-host {
+  /* Translucent caption: white title text keeps 4.5:1 over the brightest cloud. */
+  --lg-tint: linear-gradient(90deg, #000080d9, #1084d0a6);
+  --lg-solid: linear-gradient(90deg, #000080, #1084d0);
+}
+[data-theme='win97'] .titlebar.lg-host > .lg-sheen {
+  box-shadow: inset 0 1px #fff6;
+}
+[data-theme='win97'] .retro-start-popup.lg-host {
+  --lg-tint: #c0c0c0e6;
+}
+/* Safari/Firefox paint a refracted wallpaper copy above the tint. Keep it faint under the
+   caption so white title text stays readable, and off where glass sits over grey. */
+[data-theme='win97'] .lg-local-scene {
+  opacity: 1;
+}
+[data-theme='win97'] .titlebar > .lg-layer > .lg-local-scene {
+  opacity: 0.2;
+}
+[data-theme='win97'] :is(.retro-start-popup, dialog) > .lg-layer > .lg-local-scene {
+  opacity: 0;
+}
+[data-theme='win97'] dialog {
+  border: 2px outset #eee;
+  border-radius: 0;
+  padding: 5px 16px 17px;
+  background: #c0c0c0 !important;
+  box-shadow: 2px 3px #0005;
+}
+[data-theme='win97'] .dialog-heading {
+  margin: 0 -12px 17px;
+  padding: 4px 6px;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  min-height: 28px;
+}
+[data-theme='win97'] .dialog-heading h2 {
+  font-size: 12px;
+  letter-spacing: 0;
+}
+[data-theme='win97'] .dialog-heading button {
+  width: 20px;
+  height: 20px;
+  padding: 1px !important;
+}
+[data-theme='win97'] dialog.lg-host {
+  --lg-tint: #c0c0c0f5;
+}
+/* Desktop shortcuts and functioning taskbar. Pixel graphics are original Qrer art. */
+.retro-desktop {
+  position: fixed;
+  z-index: 2;
+  top: 24px;
+  left: 14px;
+  flex-direction: column;
+  gap: 16px;
+  width: 84px;
+}
+[data-theme='win97'] .retro-desktop button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  padding: 6px 2px !important;
+  line-height: 1.3;
+  text-align: center;
+  min-height: 68px;
+}
+[data-theme='win97'] .retro-desktop button:focus-visible {
+  outline: 1px dotted #fff;
+  outline-offset: 1px;
+  background: #00008055 !important;
+}
+.retro-desktop .retro-icon {
+  width: 34px;
+  height: 34px;
+}
+.retro-desktop span {
+  text-shadow: 1px 1px #005050;
+}
+.retro-taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  align-items: center;
+  gap: 4px;
+  padding: 3px;
+  background: #c0c0c0;
+  border-top: 1px solid #dfdfdf;
+  box-shadow: inset 0 1px #fff;
+  z-index: 30;
+  font-size: 12px;
+}
+.retro-taskbar #startMenu {
+  position: relative;
+}
+.retro-taskbar summary {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 2px 7px;
+  height: 28px;
+  list-style: none;
+  border: 1px solid #808080;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #808080,
+    1px 1px #000;
+  background: #c0c0c0;
+}
+.retro-taskbar .retro-icon {
+  width: 22px;
+  height: 22px;
+}
+.retro-taskbar details[open] > summary {
+  box-shadow:
+    inset 1px 1px #808080,
+    inset -1px -1px #fff;
+}
+.retro-task-divider {
+  width: 3px;
+  height: 25px;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #fff;
+  margin: 0 3px;
+}
+[data-theme='win97'] #taskbarQrer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 27px !important;
+  height: 27px;
+  max-width: 220px;
+  min-width: 0;
+  padding: 3px 8px !important;
+  font-size: 11px;
+  font-weight: 700;
+  overflow: hidden;
+}
+[data-theme='win97'] #taskbarQrer[aria-pressed='true'] {
+  background: repeating-conic-gradient(#fff 0 25%, #c0c0c0 0 50%) 0/2px 2px !important;
+  box-shadow:
+    inset 1px 1px #808080,
+    inset -1px -1px #fff !important;
+}
+#taskbarQrer span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.retro-tray {
+  margin-left: auto;
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+  padding: 3px 10px;
+  min-width: 87px;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.retro-tray > span {
+  font-size: 10px;
+  color: #007000;
+}
+.retro-start-popup {
+  position: absolute;
+  left: 0;
+  bottom: 30px;
+  width: 250px;
+  max-width: calc(100vw - 8px);
+  background: #c0c0c0;
+  border: 2px outset #eee;
+  box-shadow: 2px 2px #0007;
+  display: flex;
+  color: #000;
+  padding: 3px;
+}
+.retro-start-brand {
+  background: linear-gradient(#000080, #1084d0);
+  color: #c0c0c0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 10px 5px;
+  font:
+    700 23px Arial,
+    sans-serif;
+  letter-spacing: -1px;
+}
+.retro-start-brand b {
+  color: #fff;
+}
+.retro-start-items {
+  flex: 1;
+  min-width: 0;
+  padding: 2px;
+}
+[data-theme='win97'] .retro-start-items button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 43px !important;
+  width: 100%;
+  padding: 5px 9px !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  text-align: left;
+  font-size: 12px;
+  background: transparent !important;
+}
+[data-theme='win97'] .retro-start-items button:hover,
+[data-theme='win97'] .retro-start-items button:focus-visible {
+  background: #000080 !important;
+  color: #fff !important;
+  outline: none;
+}
+.retro-start-items .retro-icon {
+  width: 29px;
+  height: 29px;
+}
+.retro-start-items hr {
+  border: 0;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  margin: 4px;
+}
+[data-theme='win97'] body:not([data-window-state='open']) #glassCanvas {
+  display: none;
+}
+[data-theme='win97'] .app-window[data-maximized='true'] {
+  position: fixed;
+  z-index: 10;
+  inset: 3px 3px 39px;
+  width: auto;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+[data-theme='win97'] .app-window[data-maximized='true'] .work-area {
+  flex: 1;
+}
+/* Detachable export toolbox: same controls and listeners, docked by default. */
+[data-theme='win97'] .retro-floating:not([hidden]) {
+  display: block;
+  position: fixed;
+  z-index: 25;
+  width: 350px;
+  max-width: calc(100vw - 8px);
+  max-height: calc(100svh - 48px);
+  overflow: auto;
+  padding: 3px;
+  background: #c0c0c0;
+  border: 2px outset #eee;
+  box-shadow: 3px 3px #0005;
+}
+.retro-floating > header {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  gap: 5px;
+  padding: 2px;
+}
+[data-theme='win97'] #floatingDrag {
+  flex: 1;
+  text-align: left;
+  padding: 2px 5px !important;
+  font-weight: bold;
+  font-size: 12px;
+  color: #fff !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  cursor: move;
+  touch-action: none;
+  min-height: 23px !important;
+  user-select: none;
+}
+[data-theme='win97'] #dockExport {
+  width: 21px;
+  min-height: 20px !important;
+  height: 20px;
+  font: bold 17px/14px Arial;
+  padding: 0 !important;
+}
+.retro-floating .export-tray {
+  border: 0 !important;
+  margin: 4px 0 0;
+}
+.shortcut-list {
+  font-size: 12px;
+}
+.shortcut-list dt {
+  font-weight: 600;
+  margin-top: 12px;
+}
+.shortcut-list dd {
+  margin: 3px 0 0;
+  color: var(--muted);
+}
+@media (max-width: 1100px) {
+  [data-theme='win97'] body {
+    padding: 18px 16px 56px;
+  }
+  [data-theme='win97'] .retro-desktop {
+    display: none;
+  }
+  [data-theme='win97'] .work-area {
+    grid-template-columns: 320px minmax(0, 1fr);
+  }
+}
+@media (max-width: 850px) {
+  [data-theme='win97'] .retro-caption {
+    display: none;
+  }
+  [data-theme='win97'] .output {
+    padding: 23px 18px 18px;
+  }
+  [data-theme='win97'] .export-toolbar {
+    gap: 5px;
+  }
+  [data-theme='win97'] .export-toolbar select {
+    width: 80px;
+  }
+}
+@media (max-width: 660px) {
+  [data-theme='win97'] body {
+    padding: 8px 5px 48px;
+    align-items: flex-start;
+  }
+  [data-theme='win97'] .app-window {
+    max-width: 470px;
+    padding: 3px;
+  }
+  [data-theme='win97'] .titlebar {
+    padding: 4px;
+    min-height: 33px;
+    flex-wrap: nowrap;
+    gap: 5px;
+  }
+  [data-theme='win97'] .app-title {
+    gap: 4px;
+  }
+  [data-theme='win97'] .app-title h1 {
+    font-size: 12px;
+  }
+  [data-theme='win97'] .app-title > .retro-icon {
+    width: 18px;
+    height: 18px;
+  }
+  [data-theme='win97'] .window-options {
+    gap: 5px;
+  }
+  [data-theme='win97'] .window-options select {
+    width: 85px;
+    font-size: 10px !important;
+    min-height: 23px;
+    height: 23px;
+  }
+  [data-theme='win97'] .retro-window-controls {
+    margin-left: 3px;
+    gap: 2px;
+  }
+  [data-theme='win97'] #windowMaximize {
+    display: none;
+  }
+  [data-theme='win97'] .retro-window-controls button {
+    width: 18px;
+    height: 19px;
+  }
+  [data-theme='win97'] .glass-control {
+    font-size: 10px;
+    gap: 3px;
+    margin-left: 0;
+  }
+  [data-theme='win97'] .glass-control input {
+    width: 12px;
+    height: 12px;
+  }
+  [data-theme='win97'] .window-toolbar {
+    padding: 0 5px;
+    height: 34px;
+  }
+  [data-theme='win97'] .document-title {
+    border: 0;
+    padding: 0;
+    font-size: 10px;
+    gap: 4px;
+  }
+  [data-theme='win97'] .document-title .icon {
+    display: none;
+  }
+  [data-theme='win97'] .tools-menu summary,
+  [data-theme='win97'] .retro-menu summary {
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+  [data-theme='win97'] .utility-actions #scanBtn {
+    margin-left: 4px;
+    font-size: 10px;
+    min-height: 24px !important;
+    padding: 2px 6px !important;
+    gap: 4px;
+  }
+  [data-theme='win97'] .utility-actions #scanBtn .icon {
+    width: 12px;
+    height: 12px;
+  }
+  [data-theme='win97'] .work-area {
+    min-height: 0;
+    display: flex;
+  }
+  [data-theme='win97'] .editor {
+    border-right: 0;
+    border-bottom: 1px solid #808080;
+  }
+  [data-theme='win97'] .panel {
+    padding: 18px 16px;
+    min-height: 0;
+  }
+  [data-theme='win97'] .editor-tabs {
+    margin: 13px 12px 0;
+  }
+  [data-theme='win97'] .editor-tabs button {
+    flex: 1;
+    min-width: 0;
+  }
+  [data-theme='win97'] textarea#data {
+    min-height: 115px;
+    height: 115px;
+  }
+  [data-theme='win97'] .output {
+    padding: 19px 15px;
+  }
+  [data-theme='win97'] .qr-stage {
+    min-height: 260px;
+  }
+  [data-theme='win97'] .export-toolbar select {
+    width: 87px;
+  }
+  [data-theme='win97'] .tools-popup,
+  [data-theme='win97'] .retro-popup {
+    min-width: 190px;
+    left: auto;
+    right: 0;
+  }
+  [data-theme='win97'] #retroHelpMenu .retro-popup {
+    right: -45px;
+  }
+  .retro-tray {
+    min-width: 73px;
+    padding: 3px 7px;
+    gap: 6px;
+  }
+  .retro-taskbar #taskbarQrer {
+    max-width: 190px;
+    flex: 1;
+  }
+  .retro-taskbar summary {
+    padding: 2px 6px;
+  }
+  .retro-task-divider {
+    margin: 0 1px;
+  }
+}
+@media (max-width: 360px) {
+  [data-theme='win97'] .window-options select {
+    width: 78px;
+  }
+  [data-theme='win97'] .window-options {
+    gap: 4px;
+  }
+  [data-theme='win97'] .glass-control {
+    font-size: 10px;
+  }
+  [data-theme='win97'] .titlebar {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+  [data-theme='win97'] .app-title h1 {
+    font-size: 11px;
+  }
+  [data-theme='win97'] .app-title > .retro-icon {
+    width: 16px;
+    height: 16px;
+  }
+  [data-theme='win97'] .retro-window-controls {
+    margin-left: 1px;
+  }
+  [data-theme='win97'] .output {
+    padding: 17px 12px;
+  }
+  [data-theme='win97'] .export-toolbar {
+    gap: 5px;
+    padding: 3px;
+  }
+  [data-theme='win97'] .export-toolbar select {
+    width: 82px;
+  }
+  [data-theme='win97'] .export-toolbar:before {
+    display: none;
+  }
+  .retro-tray {
+    min-width: 65px;
+    gap: 5px;
+    padding: 3px 5px;
+  }
+}
+[data-theme='win97'] .window-toolbar .document-title {
+  order: 2;
+  margin-left: auto;
+  border: 0;
+  padding-left: 8px;
+}
+[data-theme='win97'] .window-toolbar .utility-actions {
+  order: 1;
+}
+[data-theme='win97'] .work-area {
+  min-height: 560px;
+}
+@media (max-width: 660px) {
+  [data-theme='win97'] .work-area {
+    min-height: 0;
+  }
+  [data-theme='win97'] .tools-popup,
+  [data-theme='win97'] .retro-popup,
+  [data-theme='win97'] #retroHelpMenu .retro-popup {
+    left: 0;
+    right: auto;
+    min-width: 190px;
+    max-width: calc(100vw - 30px);
+  }
+}

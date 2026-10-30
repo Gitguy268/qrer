@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en" data-theme="win97">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Qrer</title>
+    <meta
+      name="description"
+      content="A local QR utility. Create codes for links, text, Wi-Fi, and email. Export PNG or SVG."
+    />
+    <meta name="theme-color" content="#2f6fc4" />
+    <meta name="apple-mobile-web-app-title" content="Qrer" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="stylesheet" href="assets/vendor/liquid-glass-web/liquid-glass.css" />
+    <link rel="stylesheet" href="assets/ui.css?v=2.7.0" />
+    <link rel="stylesheet" href="assets/vendor/win98-web/controls.css" />
+    <link rel="stylesheet" href="assets/vendor/liquid-glass-effect/rim.css" />
+    <link rel="stylesheet" href="assets/retro.css?v=2.7.0" />
+    <script src="register-sw.js" defer></script>
+  </head>
+  <body>
+    <svg class="icon-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="icon-qr" viewBox="0 0 24 24">
+          <path
+            d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 19h2v2h-2zM19 13h2v2h-2zM13 19h2v2h-2z"
+          />
+        </symbol>
+        <symbol id="icon-page" viewBox="0 0 24 24">
+          <path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h5" />
+        </symbol>
+        <symbol id="icon-scan" viewBox="0 0 24 24">
+          <path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5M3 12h18" />
+        </symbol>
+        <symbol id="icon-save" viewBox="0 0 24 24">
+          <path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4" />
+        </symbol>
+        <symbol id="icon-copy" viewBox="0 0 24 24">
+          <rect x="8" y="8" width="12" height="13" rx="2" />
+          <path d="M15 8V3H3v13h5" />
+        </symbol>
+        <symbol id="icon-share" viewBox="0 0 24 24">
+          <path d="M12 15V2m-4 4 4-4 4 4M7 9H4v12h16V9h-3" />
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24">
+          <path d="M12 4v16M4 12h16" />
+        </symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24">
+          <path d="m6 6 12 12M18 6 6 18" />
+        </symbol>
+        <symbol id="icon-undo" viewBox="0 0 24 24">
+          <path d="m8 4-5 5 5 5M3 9h10a7 7 0 0 1 7 7v4" />
+        </symbol>
+        <symbol id="icon-redo" viewBox="0 0 24 24">
+          <path d="m16 4 5 5-5 5m5-5H11a7 7 0 0 0-7 7v4" />
+        </symbol>
+        <symbol id="icon-reset" viewBox="0 0 24 24">
+          <path d="M4 10a8 8 0 1 1 0 5M4 4v6h6" />
+        </symbol>
+      </defs>
+    </svg>
+    <a class="skip" href="#editor">Skip to editor</a>
+    <canvas id="desktop" aria-hidden="true"></canvas>
+    <canvas id="glassCanvas" aria-hidden="true"></canvas>
+    <nav class="retro-desktop retro-only" aria-label="Desktop shortcuts">
+      <button type="button" data-retro-action="editor">
+        <svg class="retro-icon" aria-hidden="true">
+          <use href="assets/retro-icons.svg#computer" /></svg
+        ><span>QR Editor</span></button
+      ><button type="button" data-retro-action="scan">
+        <svg class="retro-icon" aria-hidden="true">
+          <use href="assets/retro-icons.svg#scan" /></svg
+        ><span>Read a QR</span></button
+      ><button type="button" data-retro-action="display">
+        <svg class="retro-icon" aria-hidden="true">
+          <use href="assets/retro-icons.svg#display" /></svg
+        ><span>Display</span>
+      </button>
+    </nav>
+    <main class="app-window" id="appWindow">
+      <header class="titlebar">
+        <div class="app-title">
+          <svg class="retro-icon retro-only" aria-hidden="true">
+            <use href="assets/retro-icons.svg#computer" />
+          </svg>
+          <h1>Qrer</h1>
+          <span class="retro-caption retro-only">— QR Editor</span>
+        </div>
+        <div class="window-options">
+          <div class="retro-window-controls retro-only">
+            <button id="windowMinimize" type="button" aria-label="Minimize Qrer" title="Minimize">
+              <span class="minimize-glyph"></span></button
+            ><button id="windowMaximize" type="button" aria-label="Maximize Qrer" title="Maximize">
+              <span class="maximize-glyph"></span></button
+            ><button
+              id="windowClose"
+              type="button"
+              aria-label="Close Qrer window"
+              title="Close window; draft stays in memory"
+            >
+              <span class="close-glyph">×</span>
+            </button>
+          </div>
+        </div>
+      </header>
+      <div class="window-toolbar">
+        <span class="document-title"
+          ><svg class="icon"><use href="#icon-page" /></svg
+          ><span id="documentName">Untitled QR</span></span
+        >
+        <div class="utility-actions">
+          <details class="tools-menu" id="toolsMenu">
+            <summary>File</summary>
+            <div class="tools-popup">
+              <button type="button" data-action="scan">Read QR…</button
+              ><button type="button" data-action="verify">Check this code</button>
+              <hr />
+              <button type="button" data-action="png">Save PNG</button
+              ><button type="button" data-action="svg">Save SVG</button
+              ><button type="button" data-action="gif">Save GIF</button>
+              <hr />
+              <button type="button" data-action="appearance">Display properties…</button
+              ><button type="button" data-action="about">About Qrer</button>
+            </div>
+          </details>
+          <details id="retroViewMenu" class="retro-menu retro-only">
+            <summary><u>V</u>iew</summary>
+            <div class="retro-popup">
+              <button type="button" data-retro-action="content">Content</button
+              ><button type="button" data-retro-action="style">Style</button
+              ><button type="button" data-retro-action="logo">Logo</button>
+              <hr />
+              <button type="button" data-retro-action="float" id="floatMenuItem">
+                Float export toolbar</button
+              ><button type="button" data-retro-action="display">Display properties…</button>
+            </div>
+          </details>
+          <details id="retroHelpMenu" class="retro-menu retro-only">
+            <summary><u>H</u>elp</summary>
+            <div class="retro-popup">
+              <button type="button" data-retro-action="shortcuts">Keyboard shortcuts</button
+              ><button type="button" data-retro-action="about">About Qrer</button>
+            </div>
+          </details>
+          <button type="button" id="scanBtn">
+            <svg class="icon"><use href="#icon-scan" /></svg><span>Read QR</span>
+          </button>
+        </div>
+      </div>
+      <div class="work-area">
+        <section class="editor" id="editor" aria-label="QR editor">
+          <div class="editor-tabs" role="tablist" aria-label="Editor section">
+            <button
+              type="button"
+              id="tab-content"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-content"
+              data-panel="content"
+            >
+              Content</button
+            ><button
+              type="button"
+              id="tab-style"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-style"
+              tabindex="-1"
+              data-panel="style"
+            >
+              Style</button
+            ><button
+              type="button"
+              id="tab-logo"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-logo"
+              tabindex="-1"
+              data-panel="logo"
+            >
+              Logo
+            </button>
+          </div>
+          <div class="panel" id="panel-content" role="tabpanel" aria-labelledby="tab-content">
+            <label class="field-label" for="contentType">Type</label
+            ><select id="contentType">
+              <option value="url">Link</option>
+              <option value="text">Text</option>
+              <option value="wifi">Wi-Fi</option>
+              <option value="email">Email</option>
+            </select>
+            <div id="simpleFields">
+              <label class="field-label" for="data" id="dataLabel">Link</label
+              ><textarea
+                id="data"
+                rows="5"
+                placeholder="https://example.com"
+                spellcheck="false"
+                autocomplete="off"
+              >
+https://example.com</textarea
+              >
+              <p class="help" id="contentHelp">Links without a scheme use https://.</p>
+              <div id="shortenFields">
+                <label class="checkbox"
+                  ><input id="shortenLink" type="checkbox" />Shorten via ha.mr</label
+                >
+                <p class="help">
+                  Makes a smaller code. Scanning opens ha.mr, which shows the link before
+                  continuing, so the link reaches ha.mr and needs it online.
+                </p>
+              </div>
+            </div>
+            <div id="wifiFields" hidden>
+              <label class="field-label" for="wifiName">Network name</label
+              ><input id="wifiName" autocomplete="off" /><label
+                class="field-label"
+                for="wifiSecurity"
+                >Security</label
+              ><select id="wifiSecurity">
+                <option value="WPA">WPA / WPA2 / WPA3</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">No password</option></select
+              ><label class="field-label" for="wifiPassword">Password</label>
+              <div class="password-field">
+                <input id="wifiPassword" type="password" autocomplete="off" /><button
+                  type="button"
+                  id="passwordToggle"
+                  aria-pressed="false"
+                >
+                  Show
+                </button>
+              </div>
+              <label class="checkbox"
+                ><input id="wifiHidden" type="checkbox" />Hidden network</label
+              >
+              <p class="help">This code contains your network password.</p>
+            </div>
+            <div id="emailFields" hidden>
+              <label class="field-label" for="emailAddress">Email address</label
+              ><input
+                id="emailAddress"
+                type="email"
+                autocomplete="off"
+                placeholder="hello@example.com"
+              /><label class="field-label" for="emailSubject">Subject</label
+              ><input id="emailSubject" /><label class="field-label" for="emailBody">Message</label
+              ><textarea id="emailBody" rows="3"></textarea>
+            </div>
+            <p class="field-error" id="contentError" role="status"></p>
+            <div class="content-meta">
+              <span id="contentCount">19 bytes</span
+              ><button class="text-button" type="button" id="clearContent">Clear</button>
+            </div>
+          </div>
+          <div class="panel" id="panel-style" role="tabpanel" aria-labelledby="tab-style" hidden>
+            <div class="look-row">
+              <label for="codeLook">Look</label
+              ><select id="codeLook">
+                <option value="clean">Clean</option>
+                <option value="styled">Custom shapes</option>
+                <option value="photo">Photo</option>
+                <option value="art">Art</option>
+              </select>
+            </div>
+            <div id="photoOptions" hidden>
+              <div class="photo-well">
+                <img id="photoThumb" alt="Selected photo" hidden /><button
+                  type="button"
+                  id="photoBtn"
+                >
+                  Choose photo…
+                </button>
+              </div>
+              <input
+                type="file"
+                id="photoFile"
+                accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                hidden
+              />
+              <div class="photo-tools">
+                <button type="button" id="photoRemove" disabled>Remove</button
+                ><label for="photoStrength" data-look="photo">Photo strength</label
+                ><input
+                  type="range"
+                  id="photoStrength"
+                  min="20"
+                  max="75"
+                  value="45"
+                  data-look="photo"
+                /><output id="photoStrengthValue" data-look="photo">45%</output>
+              </div>
+              <div class="shape-fields picture-fields">
+                <label for="photoColor" data-look="photo">Color</label
+                ><select id="photoColor" data-look="photo">
+                  <option value="color">Color</option>
+                  <option value="mono">Black and white</option></select
+                ><label for="artRender" data-look="art">Drawing</label
+                ><select id="artRender" data-look="art">
+                  <option value="dither">Dither</option>
+                  <option value="halftone">Halftone</option>
+                  <option value="stipple">Stipple</option>
+                  <option value="strokes">Strokes</option></select
+                ><label for="artDot" data-look="art">Dots</label
+                ><select id="artDot" data-look="art">
+                  <option value="square">Square</option>
+                  <option value="circle">Circle</option>
+                  <option value="diamond">Diamond</option></select
+                ><label for="artContrast" data-look="art">Contrast</label
+                ><input
+                  type="range"
+                  id="artContrast"
+                  min="-50"
+                  max="50"
+                  value="0"
+                  data-look="art"
+                /><label for="artBrightness" data-look="art">Brightness</label
+                ><input
+                  type="range"
+                  id="artBrightness"
+                  min="-50"
+                  max="50"
+                  value="0"
+                  data-look="art"
+                />
+              </div>
+              <p class="help">
+                A GIF makes an animated code; save it with GIF. Every frame is checked locally
+                before export.
+              </p>
+              <p id="photoError" class="field-error" role="status"></p>
+            </div>
+            <h2 class="panel-heading">Preset</h2>
+            <div id="presets" class="preset-grid" role="radiogroup" aria-label="QR preset"></div>
+            <div class="shape-fields">
+              <label for="modules">Modules</label
+              ><select id="modules">
+                <option value="square">Square</option>
+                <option value="rounded">Rounded</option>
+                <option value="dots">Dots</option>
+                <option value="classy">Classy</option></select
+              ><label for="corners">Corners</label
+              ><select id="corners">
+                <option value="square">Square</option>
+                <option value="extra-rounded">Rounded</option>
+                <option value="dot">Circle</option></select
+              ><label for="eyes">Eyes</label
+              ><select id="eyes">
+                <option value="square">Square</option>
+                <option value="dot">Circle</option>
+              </select>
+            </div>
+            <h2 class="group-title">Colors</h2>
+            <div class="color-row">
+              <label for="inkColor">Code</label
+              ><input type="color" id="inkColor" value="#252d32" /><input
+                id="inkHex"
+                class="hex"
+                value="#252d32"
+                maxlength="7"
+                aria-label="Code color hex"
+              />
+            </div>
+            <div class="color-row">
+              <label for="eyeColor">Eyes</label
+              ><input type="color" id="eyeColor" value="#252d32" /><input
+                id="eyeHex"
+                class="hex"
+                value="#252d32"
+                maxlength="7"
+                aria-label="Eye color hex"
+              />
+            </div>
+            <div class="color-row">
+              <label for="paperColor">Background</label
+              ><input type="color" id="paperColor" value="#f8faef" /><input
+                id="paperHex"
+                class="hex"
+                value="#f8faef"
+                maxlength="7"
+                aria-label="Background color hex"
+              />
+            </div>
+            <div class="frame-fields">
+              <label for="frame">Frame</label
+              ><select id="frame">
+                <option value="none">None</option>
+                <option value="caption">Caption</option>
+                <option value="tag">Outline</option>
+                <option value="card">Card</option></select
+              ><label for="frameLabel" id="frameLabelTitle" hidden>Caption</label
+              ><input id="frameLabel" value="SCAN ME" maxlength="32" hidden />
+            </div>
+            <div class="style-actions">
+              <div class="style-history" aria-label="Style history">
+                <button type="button" data-history="undo" title="Undo style (Ctrl/⌘ Z)" disabled>
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#icon-undo" /></svg
+                  >Undo</button
+                ><button
+                  type="button"
+                  data-history="redo"
+                  title="Redo style (Ctrl/⌘ Shift Z)"
+                  disabled
+                >
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#icon-redo" /></svg
+                  >Redo
+                </button>
+              </div>
+              <button class="reset-button" type="button" id="resetStyle">
+                <svg class="icon"><use href="#icon-reset" /></svg>Reset style
+              </button>
+            </div>
+          </div>
+          <div class="panel" id="panel-logo" role="tabpanel" aria-labelledby="tab-logo" hidden>
+            <h2>Center image</h2>
+            <div class="logo-well">
+              <img id="logoThumb" alt="Selected logo" hidden /><svg
+                class="icon"
+                id="logoPlaceholder"
+              >
+                <use href="#icon-plus" />
+              </svg>
+            </div>
+            <div class="logo-actions">
+              <button type="button" id="logoBtn">Choose image…</button
+              ><button type="button" id="logoClear" disabled>Remove</button
+              ><input
+                type="file"
+                id="logoFile"
+                accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                hidden
+              />
+            </div>
+            <p class="help">PNG, JPEG, WebP, GIF, or SVG. Up to 12 MB.</p>
+            <p id="logoError" class="field-error" role="status"></p>
+            <fieldset id="logoOptions" disabled>
+              <legend>Image settings</legend>
+              <div class="shape-fields">
+                <label for="logoShape">Shape</label
+                ><select id="logoShape">
+                  <option value="rounded">Rounded</option>
+                  <option value="square">Square</option>
+                  <option value="circle">Circle</option>
+                </select>
+              </div>
+              <label class="range-label" for="logoScale"
+                >Size <output id="logoScaleValue">28%</output></label
+              ><input type="range" id="logoScale" min="20" max="40" step="2" value="28" /><label
+                class="range-label"
+                for="logoPadding"
+                >Padding <output id="logoPaddingValue">6</output></label
+              ><input type="range" id="logoPadding" min="0" max="16" step="2" value="6" /><label
+                class="checkbox"
+                ><input id="logoBacking" type="checkbox" />White backing</label
+              ><label class="checkbox"
+                ><input id="logoClearSpace" type="checkbox" checked />Clear code behind image</label
+              >
+            </fieldset>
+            <div class="style-history" aria-label="Style history">
+              <button type="button" data-history="undo" title="Undo style (Ctrl/⌘ Z)" disabled>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#icon-undo" /></svg
+                >Undo</button
+              ><button
+                type="button"
+                data-history="redo"
+                title="Redo style (Ctrl/⌘ Shift Z)"
+                disabled
+              >
+                <svg class="icon" aria-hidden="true">
+                  <use href="#icon-redo" /></svg
+                >Redo
+              </button>
+            </div>
+            <p class="help">
+              Error correction increases when an image is added. Test before printing.
+            </p>
+          </div>
+        </section>
+        <section class="output" aria-label="QR preview and export">
+          <div class="qr-stage">
+            <div id="qr" role="img" aria-label="Generated QR code"></div>
+          </div>
+          <p id="quality" class="quality" role="status"></p>
+          <div class="export-tray">
+            <div class="export-toolbar">
+              <label for="exportSize">Size</label
+              ><select id="exportSize">
+                <option value="512">512 px</option>
+                <option value="1024" selected>1024 px</option>
+                <option value="2048">2048 px</option></select
+              ><span class="export-spacer"></span
+              ><button type="button" id="copyBtn" title="Copy PNG">
+                <svg class="icon"><use href="#icon-copy" /></svg><span>Copy</span></button
+              ><button type="button" id="shareBtn" title="Share card">
+                <svg class="icon"><use href="#icon-share" /></svg><span>Share</span>
+              </button>
+            </div>
+            <div class="export-name">
+              <label for="exportName">File name</label
+              ><input
+                id="exportName"
+                value="qrer"
+                maxlength="80"
+                autocomplete="off"
+                spellcheck="false"
+                aria-describedby="exportDimensions"
+              />
+            </div>
+            <div class="download-actions">
+              <button class="primary" type="button" id="dlPng">
+                <svg class="icon"><use href="#icon-save" /></svg
+                ><span id="downloadLabel">Download PNG</span></button
+              ><button type="button" id="dlSvg">SVG</button
+              ><button type="button" id="dlGif" hidden>GIF</button>
+            </div>
+            <div class="export-help">
+              <span id="exportDimensions" aria-live="polite">1024 × 1024 px</span
+              ><button type="button" class="text-button" id="verifyBtn">Check this code</button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer class="statusbar">
+        <span id="appStatus" role="status">Ready</span>
+        <div>
+          <label class="glass-control"
+            ><input id="glassToggle" type="checkbox" role="switch" checked /><span id="glassStatus"
+              >Liquid glass</span
+            ></label
+          ><button type="button" class="text-button" id="aboutBtn">About</button>
+        </div>
+      </footer>
+    </main>
+    <footer class="retro-taskbar retro-only" aria-label="Desktop taskbar">
+      <details id="startMenu">
+        <summary>
+          <svg class="retro-icon" aria-hidden="true">
+            <use href="assets/retro-icons.svg#qrer" /></svg
+          ><b>Start</b>
+        </summary>
+        <div class="retro-start-popup">
+          <div class="retro-start-brand" aria-hidden="true">Qrer <b>98</b></div>
+          <div class="retro-start-items">
+            <button type="button" data-retro-action="editor">
+              <svg class="retro-icon" aria-hidden="true">
+                <use href="assets/retro-icons.svg#computer" /></svg
+              >QR Editor</button
+            ><button type="button" data-retro-action="scan">
+              <svg class="retro-icon" aria-hidden="true">
+                <use href="assets/retro-icons.svg#scan" /></svg
+              >Read a QR code…
+            </button>
+            <hr />
+            <button type="button" data-retro-action="display">
+              <svg class="retro-icon" aria-hidden="true">
+                <use href="assets/retro-icons.svg#display" /></svg
+              >Display properties…</button
+            ><button type="button" data-retro-action="about">
+              <svg class="retro-icon" aria-hidden="true">
+                <use href="assets/retro-icons.svg#info" /></svg
+              >About Qrer
+            </button>
+          </div>
+        </div>
+      </details>
+      <div class="retro-task-divider" aria-hidden="true"></div>
+      <button id="taskbarQrer" type="button" aria-pressed="true">
+        <svg class="retro-icon" aria-hidden="true">
+          <use href="assets/retro-icons.svg#computer" /></svg
+        ><span>Qrer — QR Editor</span>
+      </button>
+      <div class="retro-tray">
+        <span title="Processing locally" aria-label="Processing locally">●</span
+        ><time id="retroClock"></time>
+      </div>
+    </footer>
+    <section id="floatingExport" class="retro-floating" aria-label="Floating export toolbar" hidden>
+      <header>
+        <button
+          id="floatingDrag"
+          type="button"
+          aria-label="Move export toolbar"
+          title="Drag to move. Arrow keys move; Home centers."
+        >
+          Export</button
+        ><button
+          id="dockExport"
+          type="button"
+          aria-label="Dock export toolbar"
+          title="Dock toolbar"
+        >
+          ×
+        </button>
+      </header>
+      <div id="floatingExportBody"></div>
+    </section>
+    <dialog id="shortcutsDialog" aria-labelledby="shortcutsTitle">
+      <div class="dialog-heading">
+        <h2 id="shortcutsTitle">Keyboard shortcuts</h2>
+        <button
+          id="shortcutsClose"
+          type="button"
+          class="icon-button"
+          aria-label="Close keyboard shortcuts"
+        >
+          <svg class="icon"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <dl class="shortcut-list">
+        <dt>Undo / redo style</dt>
+        <dd>Ctrl / ⌘ Z · Ctrl / ⌘ Shift Z<br />Text fields keep their own undo history.</dd>
+        <dt>Editor tabs</dt>
+        <dd>← / →, Home, End</dd>
+        <dt>Open menus</dt>
+        <dd>Enter, then ↑ / ↓</dd>
+        <dt>Close dialog or menu</dt>
+        <dd>Escape</dd>
+        <dt>Move floating toolbar</dt>
+        <dd>Arrow keys on its title</dd>
+        <dt>Center floating toolbar</dt>
+        <dd>Home on its title</dd>
+      </dl>
+    </dialog>
+    <dialog id="shareDialog" aria-labelledby="shareTitle">
+      <div class="dialog-heading">
+        <h2 id="shareTitle">Share card</h2>
+        <button type="button" class="icon-button" id="shareClose" aria-label="Close share card">
+          <svg class="icon"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <img id="storyPreview" alt="Share card preview" /><label
+        class="field-label"
+        for="storyCaption"
+        >Caption</label
+      ><input id="storyCaption" maxlength="80" value="Scan me" />
+      <p class="field-error" id="storyError" role="status"></p>
+      <div class="dialog-actions">
+        <button type="button" id="storySave">Save PNG</button
+        ><button type="button" id="storyShare" class="primary">Share…</button>
+      </div>
+    </dialog>
+    <dialog id="aboutDialog" aria-labelledby="aboutTitle">
+      <div class="dialog-heading">
+        <h2 id="aboutTitle">Qrer 2.6</h2>
+        <button type="button" class="icon-button" id="aboutClose" aria-label="Close about">
+          <svg class="icon"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <p>Copyright © 2026 Lucas Van De Weerd</p>
+      <p>
+        MIT licensed. Content and images are processed locally and are not saved between visits.
+      </p>
+      <p>
+        Liquid glass components by kwlck, with portable optics by gentpan; window rendering by
+        Charles Yin’s Liquid Glass Studio. QR generation by Project Nayuki and qr-code-styling; link
+        shortening by p2r3’s ha.mr; GIFs by Dean McNamee’s omggif; reading by Nimiq QR Scanner.
+        Win98 control styling adapted from Aziz Rahmad’s Win98 Web Edition. Figtree font by The
+        Figtree Project Authors.
+      </p>
+      <div class="about-links">
+        <a href="LICENSE" target="_blank" rel="noopener">MIT license</a
+        ><a href="THIRD-PARTY-NOTICES.md" target="_blank" rel="noopener">Third-party notices</a>
+      </div>
+    </dialog>
+    <dialog id="scanDialog" aria-labelledby="scanTitle">
+      <div class="dialog-heading">
+        <h2 id="scanTitle">Read a QR code</h2>
+        <button type="button" class="icon-button" id="scanClose" aria-label="Close scanner">
+          <svg class="icon"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div class="scan-actions">
+        <button type="button" id="scanFileBtn">Choose image…</button
+        ><button type="button" id="cameraStart">Start camera</button
+        ><button type="button" id="cameraStop" hidden>Stop camera</button>
+      </div>
+      <input type="file" id="scanFile" accept="image/*" hidden />
+      <div class="camera-stage">
+        <video id="scanVideo" muted playsinline hidden></video>
+      </div>
+      <div id="scanCameraList" hidden>
+        <label class="field-label" for="scanCamera">Camera</label
+        ><select id="scanCamera"></select>
+      </div>
+      <p class="help" id="scanStatus" role="status">Choose an image or start the camera.</p>
+      <div id="scanResultBox" hidden>
+        <label class="field-label" for="scanResult">Decoded content</label
+        ><textarea
+          class="scan-result"
+          id="scanResult"
+          readonly
+          rows="4"
+          spellcheck="false"
+        ></textarea>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" id="scanCopy" disabled>Copy text</button
+        ><button type="button" class="primary" id="scanUse" disabled>Use in editor</button>
+      </div>
+      <p class="help">
+        Images and camera frames stay on this device. Links are never opened automatically.
+      </p>
+    </dialog>
+    <dialog id="displayDialog" aria-labelledby="displayTitle">
+      <div class="dialog-heading">
+        <h2 id="displayTitle">Display properties</h2>
+        <button
+          type="button"
+          class="icon-button"
+          id="displayClose"
+          aria-label="Close display properties"
+        >
+          <svg class="icon"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div class="display-preview" aria-hidden="true">
+        <div><span>Qrer</span><i></i></div>
+      </div>
+      <label class="field-label" for="displayWallpaper">Wallpaper</label
+      ><select id="displayWallpaper">
+        <option value="clouds">Clouds</option>
+        <option value="teal">Teal</option></select
+      ><label class="checkbox"><input type="checkbox" id="displayGlass" />Liquid glass</label>
+      <div class="dialog-actions">
+        <button type="button" id="displayCancel">Cancel</button
+        ><button type="button" id="displayApply" class="primary">Apply</button>
+      </div>
+    </dialog>
+    <script src="assets/vendor/qr-code-styling.js"></script>
+    <script src="assets/vendor/omggif/omggif.js"></script>
+    <script src="assets/main.js?v=2.7.0" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+/* Adapted from kevinbism/liquid-glass-effect at
+   493b710b41d817cbdc3b60808e87ce747d7916f6.
+   Copyright (c) 2025 Kevin Ramirez. MIT; see LICENSE.
+   Only rim highlights are used. No layout, backdrop image or optical replacement. */
+:root[data-glass-state=active] #startMenu>summary>.lg-sheen,
+:root[data-glass-state=active] #taskbarQrer>.lg-sheen {
+  box-shadow:inset -10px -8px 0 -11px #fff,
+    inset 0 -9px 0 -8px #fff,inset 0 1px 1px #ffffff99;
+  filter:brightness(106%);
+}
