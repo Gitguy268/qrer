@@ -2,3 +2,7 @@
 .wrangler/
 node_modules/
 test-results/
+.vercel/
+.env
+.env.*
+!.env.example
