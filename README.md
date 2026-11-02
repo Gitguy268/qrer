@@ -2,6 +2,25 @@
 
 A local QR utility that looks like Windows 98, with liquid glass window chrome and taskbar over a cloud desktop. Qrer 2.7 is MIT licensed.
 
+<!-- run-steps:start -->
+## Run it locally, step by step
+
+1. **Get the code:**
+
+   ```sh
+   git clone https://github.com/Gitguy268/qrer.git
+   cd qrer
+   ```
+
+2. **Start it.** On a Mac, double-click `start.command`. Anywhere else, with Python 3:
+
+   ```sh
+   python3 serve.py --port 4317
+   ```
+
+3. **Open <http://127.0.0.1:4317/>** in your browser. Press `Ctrl+C` in the terminal to stop.
+<!-- run-steps:end -->
+
 ## Run
 
 Open `start.command` on macOS, or serve this directory:
