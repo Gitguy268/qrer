@@ -3,10 +3,13 @@
 A local QR utility that looks like Windows 98, with liquid glass window chrome and taskbar over a cloud desktop. Qrer 2.7 is MIT licensed.
 
 <!-- live-links -->
+
 **Live:** [gitguy268.github.io/qrer](https://gitguy268.github.io/qrer/) · [qrer-beta.vercel.app](https://qrer-beta.vercel.app)
+
 <!-- /live-links -->
 
 <!-- run-steps:start -->
+
 ## Run it locally, step by step
 
 1. **Get the code:**
